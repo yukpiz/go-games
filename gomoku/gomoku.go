@@ -6,6 +6,7 @@ import (
 
 var width = 10
 var height = 10
+var span = 4
 
 var cur_x = 1
 var cur_y = 1
@@ -74,11 +75,18 @@ func left_cursor() {
 	}
 
 	draw_strings(cur_x, cur_y, false, "   ", def_fg, def_bg)
-	cur_x += 4
+	cur_x -= 4
 	draw_strings(cur_x, cur_y, false, "   ", cur_fg, cur_bg)
 }
 
 func right_cursor() {
+	if cur_x == span*(width-1)+1 {
+		return
+	}
+
+	draw_strings(cur_x, cur_y, false, "   ", def_fg, def_bg)
+	cur_x += 4
+	draw_strings(cur_x, cur_y, false, "   ", cur_fg, cur_bg)
 }
 
 func main() {
@@ -112,6 +120,7 @@ loop:
 				left_cursor()
 			case termbox.KeyArrowRight:
 				//Move to right cursor
+				right_cursor()
 			}
 		}
 	}

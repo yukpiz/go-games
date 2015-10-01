@@ -131,17 +131,20 @@ func right_cursor() {
 }
 
 func switch_cell(x, y int, value string) {
-	draw_cell(to_cur_pos(x, y), " "+value+" ")
+	x, y = to_cur_pos(x, y)
+	draw_cell(x, y, " "+value+" ")
 }
 
 func to_cur_pos(board_x, board_y int) (cur_x, cur_y int) {
-	cur_x := board_x*span_x - 3
-	cur_y := board_y*span_y - 1
+	cur_x = board_x*span_x - 3
+	cur_y = board_y*span_y - 1
+	return
 }
 
 func to_board_pos(cur_x, cur_y int) (board_x, board_y int) {
-	board_x := cur_x/span_x + 1
-	board_y := cur_y/span_y + 1
+	board_x = cur_x/span_x + 1
+	board_y = cur_y/span_y + 1
+	return
 }
 
 func main() {
@@ -181,7 +184,8 @@ loop:
 				//Move to right cursor
 				right_cursor()
 			case termbox.KeySpace:
-				switch_cell(to_board_pos(cur_x, cur_y), "o")
+				x, y := to_board_pos(cur_x, cur_y)
+				switch_cell(x, y, "o")
 			}
 		}
 	}

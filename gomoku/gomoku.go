@@ -6,7 +6,8 @@ import (
 
 var width = 10
 var height = 10
-var span = 4
+var span_x = 4
+var span_y = 2
 
 var mes_x = 0
 var mes_y = 0
@@ -30,6 +31,16 @@ type cell struct {
 	x     int
 	y     int
 	value string
+}
+
+var cells []cell
+
+func init_cells() {
+	for y := 1; y < height+1; y++ {
+		for x := 1; x < width+1; x++ {
+			cells = append(cells, cell{x, y, " "})
+		}
+	}
 }
 
 func draw_strings(x, y int, horizontal bool, output string, fg, bg termbox.Attribute) {
@@ -75,6 +86,10 @@ func draw_error(value string) {
 	draw_strings(mes_x, mes_y, false, value, err_fg, err_bg)
 }
 
+func draw_cell(x, y int, value string) {
+	draw_strings(x, y, false, value, cur_fg, cur_bg)
+}
+
 func up_cursor() {
 	if cur_y == 1 {
 		return
@@ -106,13 +121,23 @@ func left_cursor() {
 }
 
 func right_cursor() {
-	if cur_x == span*(width-1)+1 {
+	if cur_x == span_x*(width-1)+1 {
 		return
 	}
 
 	draw_strings(cur_x, cur_y, false, "   ", def_fg, def_bg)
 	cur_x += 4
 	draw_strings(cur_x, cur_y, false, "   ", cur_fg, cur_bg)
+}
+
+func switch_cell(x, y int, value string) {
+	draw_cell(x*span_x-3, y*span_y-1, " "+value+" ")
+}
+
+func to_cur_pos(board_x, board_y int) (cur_x, cur_y int) {
+}
+
+func to_board_pos(cur_x, cur_y int) (board_x, board_y int) {
 }
 
 func main() {
@@ -125,10 +150,12 @@ func main() {
 	termbox.SetInputMode(termbox.InputEsc | termbox.InputMouse)
 	termbox.Clear(termbox.ColorWhite, termbox.ColorBlack)
 
+	init_cells()
+
 	draw_board()
 	draw_cursor()
 
-	draw_error("Hi Player!!")
+	draw_message("Hi Player!! It's your turn. Please press the <Space> to select the cell.")
 
 loop:
 	for {
@@ -149,6 +176,8 @@ loop:
 			case termbox.KeyArrowRight:
 				//Move to right cursor
 				right_cursor()
+			case termbox.KeySpace:
+				switch_cell(cur_x/span_x+1, cur_y/span_y+1, "o")
 			}
 		}
 	}

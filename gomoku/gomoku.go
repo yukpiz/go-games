@@ -8,6 +8,9 @@ var width = 10
 var height = 10
 var span = 4
 
+var mes_x = 0
+var mes_y = 0
+
 var cur_x = 1
 var cur_y = 1
 
@@ -16,6 +19,18 @@ var def_bg = termbox.ColorBlack
 
 var cur_fg = termbox.ColorWhite
 var cur_bg = termbox.ColorCyan
+
+var mes_fg = termbox.ColorWhite
+var mes_bg = termbox.ColorBlack
+
+var err_fg = termbox.ColorRed
+var err_bg = termbox.ColorBlack
+
+type cell struct {
+	x     int
+	y     int
+	value string
+}
 
 func draw_strings(x, y int, horizontal bool, output string, fg, bg termbox.Attribute) {
 	for _, c := range output {
@@ -43,10 +58,21 @@ func draw_board() {
 		draw_strings(0, h, false, mline, def_fg, def_bg)
 		draw_strings(0, h+1, false, tline, def_fg, def_bg)
 	}
+
+	mes_x = 0
+	mes_y = height*2 + 1
 }
 
 func draw_cursor() {
 	draw_strings(cur_x, cur_y, false, "   ", cur_fg, cur_bg)
+}
+
+func draw_message(value string) {
+	draw_strings(mes_x, mes_y, false, value, mes_fg, mes_bg)
+}
+
+func draw_error(value string) {
+	draw_strings(mes_x, mes_y, false, value, err_fg, err_bg)
 }
 
 func up_cursor() {
@@ -101,6 +127,8 @@ func main() {
 
 	draw_board()
 	draw_cursor()
+
+	draw_error("Hi Player!!")
 
 loop:
 	for {

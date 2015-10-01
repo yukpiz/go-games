@@ -130,8 +130,13 @@ func right_cursor() {
 	draw_strings(cur_x, cur_y, false, "   ", cur_fg, cur_bg)
 }
 
-func switch_cell(x, y int, value string) {
-	x, y = to_cur_pos(x, y)
+func switch_cell(board_x, board_y int, value string) {
+	x, y := to_cur_pos(board_x, board_y)
+
+	for i := range cells {
+		if cells[i].x == board_x && cells[i].y == board_y {
+		}
+	}
 	draw_cell(x, y, " "+value+" ")
 }
 

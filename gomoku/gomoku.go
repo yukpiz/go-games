@@ -169,7 +169,6 @@ func switch_cell(board_x, board_y int, value string) {
 		}
 	}
 
-	//draw_message(fmt.Sprintf("%s", cells))
 	draw_cell(x, y, " "+value+" ")
 }
 

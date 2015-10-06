@@ -1,6 +1,7 @@
 package main
 
 import (
+	//	"fmt"
 	"github.com/nsf/termbox-go"
 )
 
@@ -34,6 +35,15 @@ type cell struct {
 }
 
 var cells []cell
+
+func get_cell(board_x, board_y int) cell {
+	for i := range cells {
+		if cells[i].x == board_x && cells[i].y == board_y {
+			return cells[i]
+		}
+	}
+	return cell{-1, -1, ""}
+}
 
 func init_cells() {
 	for y := 1; y < height+1; y++ {
@@ -95,9 +105,14 @@ func up_cursor() {
 		return
 	}
 
-	draw_strings(cur_x, cur_y, false, "   ", def_fg, def_bg)
+	board_x, board_y := to_board_pos(cur_x, cur_y)
+	c := get_cell(board_x, board_y)
+	draw_strings(cur_x, cur_y, false, " "+c.value+" ", def_fg, def_bg)
+
 	cur_y -= 2
-	draw_strings(cur_x, cur_y, false, "   ", cur_fg, cur_bg)
+	board_x, board_y = to_board_pos(cur_x, cur_y)
+	c = get_cell(board_x, board_y)
+	draw_strings(cur_x, cur_y, false, " "+c.value+" ", cur_fg, cur_bg)
 }
 
 func down_cursor() {
@@ -105,9 +120,14 @@ func down_cursor() {
 		return
 	}
 
-	draw_strings(cur_x, cur_y, false, "   ", def_fg, def_bg)
+	board_x, board_y := to_board_pos(cur_x, cur_y)
+	c := get_cell(board_x, board_y)
+	draw_strings(cur_x, cur_y, false, " "+c.value+" ", def_fg, def_bg)
+
 	cur_y += 2
-	draw_strings(cur_x, cur_y, false, "   ", cur_fg, cur_bg)
+	board_x, board_y = to_board_pos(cur_x, cur_y)
+	c = get_cell(board_x, board_y)
+	draw_strings(cur_x, cur_y, false, " "+c.value+" ", cur_fg, cur_bg)
 }
 
 func left_cursor() {
@@ -115,9 +135,14 @@ func left_cursor() {
 		return
 	}
 
-	draw_strings(cur_x, cur_y, false, "   ", def_fg, def_bg)
+	board_x, board_y := to_board_pos(cur_x, cur_y)
+	c := get_cell(board_x, board_y)
+	draw_strings(cur_x, cur_y, false, " "+c.value+" ", def_fg, def_bg)
+
 	cur_x -= 4
-	draw_strings(cur_x, cur_y, false, "   ", cur_fg, cur_bg)
+	board_x, board_y = to_board_pos(cur_x, cur_y)
+	c = get_cell(board_x, board_y)
+	draw_strings(cur_x, cur_y, false, " "+c.value+" ", cur_fg, cur_bg)
 }
 
 func right_cursor() {
@@ -125,9 +150,14 @@ func right_cursor() {
 		return
 	}
 
-	draw_strings(cur_x, cur_y, false, "   ", def_fg, def_bg)
+	board_x, board_y := to_board_pos(cur_x, cur_y)
+	c := get_cell(board_x, board_y)
+	draw_strings(cur_x, cur_y, false, " "+c.value+" ", def_fg, def_bg)
+
 	cur_x += 4
-	draw_strings(cur_x, cur_y, false, "   ", cur_fg, cur_bg)
+	board_x, board_y = to_board_pos(cur_x, cur_y)
+	c = get_cell(board_x, board_y)
+	draw_strings(cur_x, cur_y, false, " "+c.value+" ", cur_fg, cur_bg)
 }
 
 func switch_cell(board_x, board_y int, value string) {
@@ -135,8 +165,11 @@ func switch_cell(board_x, board_y int, value string) {
 
 	for i := range cells {
 		if cells[i].x == board_x && cells[i].y == board_y {
+			cells[i].value = value
 		}
 	}
+
+	//draw_message(fmt.Sprintf("%s", cells))
 	draw_cell(x, y, " "+value+" ")
 }
 

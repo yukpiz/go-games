@@ -198,7 +198,6 @@ func main() {
 
 	draw_board()
 	draw_cursor()
-
 	draw_message("Hi Player!! It's your turn. Please press the <Space> to select the cell.")
 
 loop:
